@@ -4,11 +4,13 @@ package com.perflibnetcracker.authenticationservice.controller;
 import com.perflibnetcracker.authenticationservice.model.Credential;
 import com.perflibnetcracker.authenticationservice.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
@@ -27,7 +29,7 @@ public class AuthenticationController {
                 throw new Exception("User with " + tempEmailId + "is already has");
             }
         }
-        Credential credentialObj = null;
+        Credential credentialObj;
         credentialObj = authenticationService.saveUser(credential);
         return credentialObj;
     }
