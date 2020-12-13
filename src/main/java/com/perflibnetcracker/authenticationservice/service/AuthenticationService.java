@@ -1,29 +1,29 @@
 package com.perflibnetcracker.authenticationservice.service;
 
-import com.perflibnetcracker.authenticationservice.model.Credential;
-import com.perflibnetcracker.authenticationservice.repository.AuthenticationRepository;
+import com.perflibnetcracker.authenticationservice.model.User;
+import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
 
-    private final AuthenticationRepository authenticationRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AuthenticationService(AuthenticationRepository authenticationRepository) {
-        this.authenticationRepository = authenticationRepository;
+    public AuthenticationService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public Credential saveUser(Credential credential) {
-        return authenticationRepository.save(credential);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
-    public Credential fetchUserByEmailId(String email) {
-        return authenticationRepository.findByEmailId(email);
+    public User fetchUserByUsername(String userName) {
+        return userRepository.findByUsername(userName);
     }
 
-    public Credential fetchUserByEmailIdAndPassword(String email, String password) {
-        return authenticationRepository.findByEmailIdAndPassword(email, password);
+    public User fetchUserByUserNameAndPassword(String userName, String password) {
+        return userRepository.findByUsernameAndPassword(userName, password);
     }
 }
