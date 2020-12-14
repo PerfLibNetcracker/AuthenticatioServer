@@ -26,6 +26,6 @@ insert into roles (name) values
 insert into users (username, password, email) values
 	('user', '$2y$12$fTpQ0qKXEA8JRNrDLwot6Ooy9Q5egCc4iYdUz2NPHySFBtNsjsOTS', 'user@gmail.com');
 
-insert into users_role (user_id, role_id) values
+insert into users_roles (user_id, role_id) values
 	(1, 2);
 
