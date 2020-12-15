@@ -1,4 +1,4 @@
-package com.perflibnetcracker.authenticationservice.service;
+package com.perflibnetcracker.authenticationservice.service.implementation;
 
 import com.perflibnetcracker.authenticationservice.model.Role;
 import com.perflibnetcracker.authenticationservice.model.User;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
 
