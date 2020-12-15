@@ -2,7 +2,6 @@ package com.perflibnetcracker.authenticationservice.model;
 
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity

@@ -5,25 +5,12 @@ import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class AuthenticationService {
 
-    private final UserRepository userRepository;
+public interface AuthenticationService {
 
-    @Autowired
-    public AuthenticationService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    public User saveUser(User user);
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
+    public User fetchUserByUsername(String userName);
 
-    public User fetchUserByUsername(String userName) {
-        return userRepository.findByUsername(userName);
-    }
-
-    public User fetchUserByUserNameAndPassword(String userName, String password) {
-        return userRepository.findByUsernameAndPassword(userName, password);
-    }
+    public User fetchUserByUserNameAndPassword(String userName, String password);
 }
