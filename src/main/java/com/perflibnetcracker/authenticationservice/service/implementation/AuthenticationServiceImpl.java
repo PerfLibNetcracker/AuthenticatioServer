@@ -1,18 +1,34 @@
 package com.perflibnetcracker.authenticationservice.service.implementation;
 
+import com.perflibnetcracker.authenticationservice.model.Role;
 import com.perflibnetcracker.authenticationservice.model.User;
+import com.perflibnetcracker.authenticationservice.repository.RoleRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class AuthenticationServiceImpl {
 
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    private RoleRepository roleRepository;
+
+    @Autowired
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
     private final UserRepository userRepository;
 
@@ -32,7 +48,10 @@ public class AuthenticationServiceImpl {
         }
         User userForDB = user;
         userForDB.setPassword(passwordEncoder.encode(user.getPassword()));
-        userForDB.setRoles(new HashSet<>());
+        Role role = roleRepository.findByName("ROLE_USER");
+        Set setRoles = new HashSet();
+        setRoles.add(role);
+        userForDB.setRoles(setRoles);
         userRepository.save(userForDB);
         return userForDB;
     }

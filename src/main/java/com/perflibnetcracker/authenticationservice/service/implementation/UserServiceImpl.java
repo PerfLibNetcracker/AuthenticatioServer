@@ -29,6 +29,9 @@ public class UserServiceImpl implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public User getUser(Long id) {
+        return userRepository.getById(id);
+    }
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
