@@ -4,9 +4,12 @@ package com.perflibnetcracker.authenticationservice.controller;
 import com.perflibnetcracker.authenticationservice.DTO.AuthenticationDTO;
 import com.perflibnetcracker.authenticationservice.DTO.BookDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
+import com.perflibnetcracker.authenticationservice.exceptions.ResourceNotFoundException;
 import com.perflibnetcracker.authenticationservice.mappers.UserMapper;
+import com.perflibnetcracker.authenticationservice.model.Book;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.BookRepository;
+import com.perflibnetcracker.authenticationservice.service.BookService;
 import com.perflibnetcracker.authenticationservice.service.RatedService;
 import com.perflibnetcracker.authenticationservice.service.implementation.AuthenticationServiceImpl;
 import com.perflibnetcracker.authenticationservice.service.implementation.UserServiceImpl;
@@ -49,8 +52,11 @@ public class AuthenticationController {
         this.userMapper = userMapper;
     }
 
+    private BookService bookService;
     @Autowired
-    private BookRepository bookRepository;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     private RatedService ratedService;
     @Autowired
@@ -100,6 +106,16 @@ public class AuthenticationController {
         System.out.println("logout" + SecurityContextHolder.getContext().getAuthentication());
         SecurityContextHolder.clearContext();
         System.out.println("logout context" + SecurityContextHolder.getContext());
+        return new ResponseEntity("Logout Successful!", HttpStatus.OK);
+    }
+
+    @PutMapping("/api/service/authentication/authenticated/update-book/{id}")
+    public ResponseEntity<Book> updateEmployee(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
+                                               @RequestBody Book bookDetails) throws ResourceNotFoundException {
+        System.out.println(currentUser.getUsername());
+        Double newRating = bookDetails.getRating();
+        bookService.newRated(newRating, id);
+        bookService.setNewRatFOrBookByUser(id, currentUser.getUsername());
         return new ResponseEntity("Logout Successful!", HttpStatus.OK);
     }
 
