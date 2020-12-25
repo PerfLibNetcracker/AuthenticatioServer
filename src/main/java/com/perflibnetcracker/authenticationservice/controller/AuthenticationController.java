@@ -2,16 +2,30 @@ package com.perflibnetcracker.authenticationservice.controller;
 
 
 import com.perflibnetcracker.authenticationservice.DTO.AuthenticationDTO;
+import com.perflibnetcracker.authenticationservice.DTO.BookDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
 import com.perflibnetcracker.authenticationservice.mappers.UserMapper;
 import com.perflibnetcracker.authenticationservice.model.User;
+import com.perflibnetcracker.authenticationservice.repository.BookRepository;
+import com.perflibnetcracker.authenticationservice.service.RatedService;
 import com.perflibnetcracker.authenticationservice.service.implementation.AuthenticationServiceImpl;
 import com.perflibnetcracker.authenticationservice.service.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class AuthenticationController {
 
     private final AuthenticationServiceImpl authenticationService;
@@ -35,6 +49,15 @@ public class AuthenticationController {
         this.userMapper = userMapper;
     }
 
+    @Autowired
+    private BookRepository bookRepository;
+
+    private RatedService ratedService;
+    @Autowired
+    public void setRatedService(RatedService ratedService) {
+        this.ratedService = ratedService;
+    }
+
 
     @GetMapping("/api/service/authentication/authenticated/")
     public AuthenticationDTO success() {
@@ -51,6 +74,33 @@ public class AuthenticationController {
     public UserDTO getUser(@PathVariable Long id) {
         User user = userService.getUser(id);
         return userMapper.userToDTO(user);
+    }
+
+    @GetMapping("/api/service/authentication/authenticated/rated/{id_book}")
+    public List<BookDTO> getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book){
+
+        System.out.println(currentUser.getUsername());
+        return ratedService.ratedByMe(currentUser.getUsername(), id_book);
+    }
+
+    @RequestMapping(value = "/api/service/authentication/authenticated/userLogout")
+    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession(false);
+        SecurityContextHolder.clearContext();
+        // session= request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                cookie.setMaxAge(0);
+            }
+        }
+        System.out.println("logout" + SecurityContextHolder.getContext().getAuthentication());
+        SecurityContextHolder.clearContext();
+        System.out.println("logout context" + SecurityContextHolder.getContext());
+        return new ResponseEntity("Logout Successful!", HttpStatus.OK);
     }
 
 }

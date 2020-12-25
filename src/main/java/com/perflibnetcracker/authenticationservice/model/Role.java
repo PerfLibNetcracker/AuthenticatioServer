@@ -1,10 +1,8 @@
 package com.perflibnetcracker.authenticationservice.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,13 +13,16 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "roles")
 @EqualsAndHashCode(of = {"name"})
+@ToString
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
-    @ManyToMany(mappedBy = "roles")
+
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
 
 }
