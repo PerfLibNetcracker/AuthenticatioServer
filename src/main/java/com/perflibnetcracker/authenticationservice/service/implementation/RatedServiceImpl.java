@@ -18,7 +18,7 @@ public class RatedServiceImpl implements RatedService {
     }
 
     @Override
-    public List<BookDTO> ratedByMe(String username, Long id) {
+    public BookDTO ratedByMe(String username, Long id) {
         return bookRepository.findAll1(username, id);
     }
 }

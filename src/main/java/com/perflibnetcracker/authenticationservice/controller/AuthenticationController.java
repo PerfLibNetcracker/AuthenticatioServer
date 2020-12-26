@@ -83,7 +83,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/api/service/authentication/authenticated/rated/{id_book}")
-    public List<BookDTO> getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book){
+    public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book){
 
         System.out.println(currentUser.getUsername());
         return ratedService.ratedByMe(currentUser.getUsername(), id_book);
@@ -111,12 +111,13 @@ public class AuthenticationController {
 
     @PutMapping("/api/service/authentication/authenticated/update-book/{id}")
     public ResponseEntity<Book> updateEmployee(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
-                                               @RequestBody Book bookDetails) throws ResourceNotFoundException {
+                                               @RequestBody Book bookDetails) {
         System.out.println(currentUser.getUsername());
+        System.out.println(bookDetails);
         Double newRating = bookDetails.getRating();
         bookService.newRated(newRating, id);
         bookService.setNewRatFOrBookByUser(id, currentUser.getUsername());
-        return new ResponseEntity("Logout Successful!", HttpStatus.OK);
+        return new ResponseEntity("Rating correct!", HttpStatus.OK);
     }
 
 }
