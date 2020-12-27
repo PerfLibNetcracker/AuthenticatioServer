@@ -1,5 +1,7 @@
 package com.perflibnetcracker.authenticationservice.DTO;
 
+import com.perflibnetcracker.authenticationservice.model.Subscription;
+import com.perflibnetcracker.authenticationservice.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +12,17 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 public class UserDTO {
     private Long id;
     private String username;
-    private String password;
-    private String email;
-    private Set<RoleDTO> roles;
+    private Set<Subscription> subscriptions;
+    private Boolean hasSub;
+
+    public UserDTO (User user, Boolean hasSub) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.hasSub = hasSub;
+        this.subscriptions = user.getSubscriptions();
+    }
 }

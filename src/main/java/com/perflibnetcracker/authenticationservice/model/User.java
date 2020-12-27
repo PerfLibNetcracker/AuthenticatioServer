@@ -36,13 +36,19 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public void addRole(Role role) {
-        roles.add(role);
-        role.getUsers().add(this);
-    }
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "users_subscriptions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscription_id"))
+    private Set<Subscription> subscriptions = new HashSet<>();
 
-    public void removeRole(Role role) {
-        roles.remove(role);
-        role.getUsers().remove(this);
-    }
+//    public void addRole(Role role) {
+//        roles.add(role);
+//        role.getUsers().add(this);
+//    }
+//
+//    public void removeRole(Role role) {
+//        roles.remove(role);
+//        role.getUsers().remove(this);
+//    }
 }
