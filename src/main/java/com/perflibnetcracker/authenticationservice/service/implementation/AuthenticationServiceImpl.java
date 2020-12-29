@@ -4,16 +4,16 @@ import com.perflibnetcracker.authenticationservice.model.Role;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.RoleRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
+import com.perflibnetcracker.authenticationservice.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class AuthenticationServiceImpl {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     private PasswordEncoder passwordEncoder;

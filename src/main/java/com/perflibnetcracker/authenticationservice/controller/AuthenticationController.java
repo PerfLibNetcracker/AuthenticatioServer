@@ -4,11 +4,10 @@ package com.perflibnetcracker.authenticationservice.controller;
 import com.perflibnetcracker.authenticationservice.DTO.AuthenticationDTO;
 import com.perflibnetcracker.authenticationservice.DTO.BookDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
-import com.perflibnetcracker.authenticationservice.exceptions.ResourceNotFoundException;
 import com.perflibnetcracker.authenticationservice.mappers.UserMapper;
 import com.perflibnetcracker.authenticationservice.model.Book;
 import com.perflibnetcracker.authenticationservice.model.User;
-import com.perflibnetcracker.authenticationservice.repository.BookRepository;
+import com.perflibnetcracker.authenticationservice.service.AuthenticationService;
 import com.perflibnetcracker.authenticationservice.service.BookService;
 import com.perflibnetcracker.authenticationservice.service.RatedService;
 import com.perflibnetcracker.authenticationservice.service.implementation.AuthenticationServiceImpl;
@@ -19,19 +18,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @RestController
 @CrossOrigin
 public class AuthenticationController {
 
-    private final AuthenticationServiceImpl authenticationService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     private AuthenticationController(AuthenticationServiceImpl authenticationService) {
