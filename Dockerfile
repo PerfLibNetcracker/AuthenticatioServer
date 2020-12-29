@@ -1,9 +1,9 @@
-FROM maven:3.6.3-openjdk-11
+FROM maven:3.6.3-openjdk-11 as build
 COPY * ./
 RUN mvn package
 
 FROM adoptopenjdk/openjdk11:alpine
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE="--from=build /target/*.jar"
 EXPOSE 8081
 ENV PERFLIB_PROFILE=prod
 COPY ${JAR_FILE} app.jar
