@@ -1,7 +1,7 @@
 FROM maven:3.6.3-jdk-11-slim as builder
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package spring-boot:repackage
+RUN mvn -f /home/app/pom.xml -Dmaven.test.skip=true clean package spring-boot:repackage 
 
 FROM openjdk:11-jre-slim
 COPY --from=builder /home/app/target/*.jar /usr/local/lib/app.jar
