@@ -1,9 +1,10 @@
-FROM maven:3.6.3-openjdk-11 as builder
-COPY * ./
-RUN mvn package
+FROM maven:3.6.3-jdk-11-slim as builder
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package spring-boot:repackage
 
-FROM adoptopenjdk/openjdk11:alpine
+FROM openjdk:11-jre-slim
+COPY --from=builder /home/app/target/*.jar /usr/local/lib/app.jar
 EXPOSE 8081
 ENV PERFLIB_PROFILE=prod
-COPY --from=builder /target/*.jar app.jar
-ENTRYPOINT [ "java", "-jar", "/app.jar"]
+ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
