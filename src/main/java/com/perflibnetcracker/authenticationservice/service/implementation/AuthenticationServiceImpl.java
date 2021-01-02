@@ -16,33 +16,31 @@ import java.util.Set;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
 
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    private RoleRepository roleRepository;
-
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private RoleRepository roleRepository;
 
     @Autowired
     public AuthenticationServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void setRoleRepository(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
+
     // Метод реализует запись в БД нового пользователя
     public User saveUser(User user) throws Exception {
         String tempUsername = user.getUsername();
-        if(tempUsername != null && !tempUsername.equals("")) {
+        if (tempUsername != null && !tempUsername.equals("")) {
             User userObj = fetchUserByUsername(tempUsername);
-            if(userObj != null) {
+            if (userObj != null) {
                 throw new Exception("Пользователь с именем " + tempUsername + "уже существует");
             }
         }

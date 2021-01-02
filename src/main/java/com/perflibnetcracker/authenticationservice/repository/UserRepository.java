@@ -20,5 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserDTO(u, sum(case when sub.endTime > :endTime then 1 else 0 end) > 0) from User u left join u.subscriptions sub " +
             "where u.username = :username " +
             "group by u ")
-    UserDTO findUserWithSub(@Param("username") String username, @Param("endTime")LocalDateTime endTime);
+    UserDTO findUserWithSub(@Param("username") String username, @Param("endTime") LocalDateTime endTime);
 }

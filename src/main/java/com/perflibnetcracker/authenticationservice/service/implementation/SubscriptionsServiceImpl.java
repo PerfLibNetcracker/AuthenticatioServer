@@ -8,6 +8,7 @@ import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,12 +17,13 @@ import java.util.Set;
 public class SubscriptionsServiceImpl implements SubscriptionsService {
 
     private UserRepository userRepository;
+    private SubscriptionRepository subscriptionRepository;
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    private SubscriptionRepository subscriptionRepository;
     @Autowired
     public void setSubscriptionRepository(SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;

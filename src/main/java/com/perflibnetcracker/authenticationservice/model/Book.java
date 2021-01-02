@@ -44,7 +44,7 @@ public class Book {
     @Column(name = "genre_id")
     private Long genreId;
 
-    @Column(name="author_id")
+    @Column(name = "author_id")
     private Long authorId;
 
 

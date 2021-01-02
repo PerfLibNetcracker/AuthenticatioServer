@@ -14,12 +14,13 @@ import java.util.Set;
 @Transactional
 public class BookServiceImpl implements BookService {
     private UserServiceImpl userService;
+    private BookRepository bookRepository;
+
     @Autowired
     public void setUserService(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    private BookRepository bookRepository;
     @Autowired
     public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -30,6 +31,7 @@ public class BookServiceImpl implements BookService {
         bookRepository.setBookForRatting(newRat, id);
 
     }
+
     @Override
     public void setNewRatFOrBookByUser(Long id, String username) {
         Book book = bookRepository.getOne(id);

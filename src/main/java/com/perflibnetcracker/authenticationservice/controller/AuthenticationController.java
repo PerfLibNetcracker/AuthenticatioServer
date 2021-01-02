@@ -33,37 +33,35 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "${spring.frontend.url}")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private UserServiceImpl userService;
+    private UserMapper userMapper;
+    private BookService bookService;
+    private RatedService ratedService;
 
     @Autowired
     private AuthenticationController(AuthenticationServiceImpl authenticationService) {
         this.authenticationService = authenticationService;
     }
 
-    private UserServiceImpl userService;
-
     @Autowired
     private void setUserService(UserServiceImpl userService) {
         this.userService = userService;
     }
-
-    private UserMapper userMapper;
 
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
 
-    private BookService bookService;
     @Autowired
     public void setBookService(BookService bookService) {
         this.bookService = bookService;
     }
 
-    private RatedService ratedService;
     @Autowired
     public void setRatedService(RatedService ratedService) {
         this.ratedService = ratedService;
@@ -88,7 +86,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("${spring.urlmap}/rated/{id_book}")
-    public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book){
+    public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book) {
 
         System.out.println(currentUser.getUsername());
         return ratedService.ratedByMe(currentUser.getUsername(), id_book);

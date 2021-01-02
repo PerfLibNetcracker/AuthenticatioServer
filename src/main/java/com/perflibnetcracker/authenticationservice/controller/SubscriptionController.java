@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "${spring.frontend.url}")
 public class SubscriptionController {
 
     private SubscriptionsService subscriptionsService;
+
     @Autowired
     public void setSubscriptionsService(SubscriptionsService subscriptionsService) {
         this.subscriptionsService = subscriptionsService;
