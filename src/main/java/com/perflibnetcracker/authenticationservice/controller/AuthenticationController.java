@@ -70,31 +70,31 @@ public class AuthenticationController {
     }
 
 
-    @GetMapping("/api/service/authentication/authenticated/")
+    @GetMapping("${spring.urlmap}")
     public AuthenticationDTO success() {
         return new AuthenticationDTO("successes");
     }
 
-    @PostMapping("/api/service/authentication/registration/")
+    @PostMapping("${spring.urlmap}/registration/")
     public User newUser(@RequestBody User user) throws Exception {
         User userObj = authenticationService.saveUser(user);
         return userObj;
     }
 
-    @GetMapping("/api/service/authentication/authenticated/{id}")
+    @GetMapping("${spring.urlmap}/{id}")
     public UserDTO getUser(@PathVariable Long id) {
         User user = userService.getUser(id);
         return userMapper.userToDTO(user);
     }
 
-    @GetMapping("/api/service/authentication/authenticated/rated/{id_book}")
+    @GetMapping("${spring.urlmap}/rated/{id_book}")
     public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book){
 
         System.out.println(currentUser.getUsername());
         return ratedService.ratedByMe(currentUser.getUsername(), id_book);
     }
 
-    @RequestMapping(value = "/api/service/authentication/authenticated/userLogout")
+    @RequestMapping(value = "${spring.urlmap}/userLogout")
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
@@ -114,7 +114,7 @@ public class AuthenticationController {
         return new ResponseEntity("Logout Successful!", HttpStatus.OK);
     }
 
-    @PutMapping("/api/service/authentication/authenticated/update-book/{id}")
+    @PutMapping("${spring.urlmap}/update-book/{id}")
     public ResponseEntity<Book> updateEmployee(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
                                                @RequestBody Book bookDetails) {
         System.out.println(currentUser.getUsername());
