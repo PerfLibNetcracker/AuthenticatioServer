@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: authservice
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           image: plyshka/auth_server_perflib:latest
           ports:
             - containerPort: 8081
