@@ -25,8 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userServiceImpl = userServiceImpl;
     }
 
-    // TODO(Kuptsov): antMatchers надо указать в зависимости от конфигурации (prod/dev)
-    //  с маппингами на dev и без них на prod
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
