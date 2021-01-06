@@ -113,7 +113,7 @@ public class AuthenticationController {
     }
 
     @PutMapping("${spring.urlmap}/update-book/{id}")
-    public ResponseEntity<Book> updateEmployee(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
+    public ResponseEntity<Book> updateRatingForBook(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
                                                @RequestBody Book bookDetails) {
         System.out.println(currentUser.getUsername());
         System.out.println(bookDetails);
