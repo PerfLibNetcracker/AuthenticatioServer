@@ -25,15 +25,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userServiceImpl = userServiceImpl;
     }
 
-    // TODO(Kuptsov): antMatchers надо указать в зависимости от конфигурации (prod/dev)
-    //  с маппингами на dev и без них на prod
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable().httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/service/authentication/authenticated/**").authenticated();
+                .antMatchers(HttpMethod.GET, "/**").authenticated();
     }
 
     // Метод для дешиврования из БД
