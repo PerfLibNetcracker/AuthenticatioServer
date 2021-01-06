@@ -73,7 +73,7 @@ public class AuthenticationController {
         return new AuthenticationDTO("successes");
     }
 
-    @PostMapping("${spring.urlmap}/registration/")
+    @PostMapping("${spring.urlmap}/registration")
     public User newUser(@RequestBody User user) throws Exception {
         User userObj = authenticationService.saveUser(user);
         return userObj;

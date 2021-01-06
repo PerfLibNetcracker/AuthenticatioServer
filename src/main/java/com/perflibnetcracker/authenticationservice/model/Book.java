@@ -47,7 +47,6 @@ public class Book {
     @Column(name = "author_id")
     private Long authorId;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", insertable = false, updatable = false)
     private Author author;
@@ -55,8 +54,6 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id", insertable = false, updatable = false)
     private Genre genre;
-
-//    @JsonBackReference
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
