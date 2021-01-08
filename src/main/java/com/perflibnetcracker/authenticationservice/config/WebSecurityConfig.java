@@ -35,7 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/**").authenticated();
     }
 
-    // Метод для дешиврования из БД
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
