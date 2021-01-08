@@ -16,12 +16,10 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
 
-    private UserRepository userRepository;
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

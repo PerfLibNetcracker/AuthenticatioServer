@@ -15,7 +15,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "from Book b left join b.users us " +
             "where b.id = :id " +
             "group by b ")
-    BookDTO findAll1(@Param("username") String username, @Param("id") Long id);
+    BookDTO findAllUserWithSubscription(@Param("username") String username, @Param("id") Long id);
 
     @Modifying
     @Query("UPDATE Book b SET b.rating = (b.rating + :newRat) / 2 WHERE b.id = :id")

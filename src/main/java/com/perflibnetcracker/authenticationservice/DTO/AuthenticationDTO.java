@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class AuthenticationDTO {
-    private String message;
 
+    private String message;
 
     @Override
     public String toString() {

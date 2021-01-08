@@ -5,7 +5,6 @@ import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.RoleRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,27 +14,16 @@ import java.util.Set;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository) {
+    public AuthenticationServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
-    // Метод реализует запись в БД нового пользователя
     public User saveUser(User user) throws Exception {
         String tempUsername = user.getUsername();
         if (tempUsername != null && !tempUsername.equals("")) {

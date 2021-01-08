@@ -1,7 +1,7 @@
 package com.perflibnetcracker.authenticationservice.repository;
 
 import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
-import com.perflibnetcracker.authenticationservice.DTO.UserForBoughtDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO;
 import com.perflibnetcracker.authenticationservice.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,9 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "group by u ")
     UserDTO findUserWithSub(@Param("username") String username, @Param("endTime") LocalDateTime endTime);
 
-    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserForBoughtDTO((sum(case when us_b.bookId = :bookId then 1 else 0 end) > 0), us) " +
+    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO((sum(case when us_b.bookId = :bookId then 1 else 0 end) > 0), us) " +
             "from User us left join us.boughtBooks us_b " +
             "where us.username = :username " +
             "group by us ")
-    UserForBoughtDTO findUserBought(@Param("username") String username, @Param("bookId") Long bookId);
+    UserBoughtBooksDTO findUserBought(@Param("username") String username, @Param("bookId") Long bookId);
 }

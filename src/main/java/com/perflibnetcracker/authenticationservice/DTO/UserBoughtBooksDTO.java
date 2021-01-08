@@ -11,13 +11,14 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserForBoughtDTO {
+public class UserBoughtBooksDTO {
+
     private Long id;
     private String username;
     private Set<BoughtBooks> boughtBooks;
     private Boolean bought;
 
-    public UserForBoughtDTO(Boolean bought, User user) {
+    public UserBoughtBooksDTO(Boolean bought, User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.boughtBooks = user.getBoughtBooks();
