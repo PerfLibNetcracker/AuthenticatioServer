@@ -87,17 +87,13 @@ public class AuthenticationController {
 
     @GetMapping("${spring.urlmap}/rated/{id_book}")
     public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book) {
-
-        System.out.println(currentUser.getUsername());
         return ratedService.ratedByMe(currentUser.getUsername(), id_book);
     }
 
     @RequestMapping(value = "${spring.urlmap}/userLogout")
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
-
         HttpSession session = request.getSession(false);
         SecurityContextHolder.clearContext();
-        // session= request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
@@ -113,13 +109,11 @@ public class AuthenticationController {
     }
 
     @PutMapping("${spring.urlmap}/update-book/{id}")
-    public ResponseEntity<Book> updateEmployee(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
+    public ResponseEntity<Book> updateRatingForBook(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
                                                @RequestBody Book bookDetails) {
-        System.out.println(currentUser.getUsername());
-        System.out.println(bookDetails);
         Double newRating = bookDetails.getRating();
         bookService.newRated(newRating, id);
-        bookService.setNewRatFOrBookByUser(id, currentUser.getUsername());
+        bookService.setNewRatForBookByUser(id, currentUser.getUsername());
         return new ResponseEntity("Rating correct!", HttpStatus.OK);
     }
 

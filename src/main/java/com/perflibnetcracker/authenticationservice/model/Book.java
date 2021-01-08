@@ -62,4 +62,5 @@ public class Book {
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<User> users = new HashSet<>();
+
 }

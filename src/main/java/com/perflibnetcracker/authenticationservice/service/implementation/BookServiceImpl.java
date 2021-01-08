@@ -29,11 +29,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void newRated(Double newRat, Long id) {
         bookRepository.setBookForRatting(newRat, id);
-
     }
 
     @Override
-    public void setNewRatFOrBookByUser(Long id, String username) {
+    public void setNewRatForBookByUser(Long id, String username) {
         Book book = bookRepository.getOne(id);
         User user = userService.findByUsername(username);
         Set users = book.getUsers();
