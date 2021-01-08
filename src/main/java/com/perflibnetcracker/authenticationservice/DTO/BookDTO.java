@@ -24,7 +24,8 @@ public class BookDTO {
         this.meRated = meRated;
     }
 
-    public String getUser(User user) {
-        return user != null ? user.getUsername() : "<none>";
-    }
+
+//    public String getUser(User user) {
+//        return user != null ? user.getUsername() : "<none>";
+//    }
 }

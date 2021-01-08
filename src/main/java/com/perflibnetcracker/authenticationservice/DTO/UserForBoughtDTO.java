@@ -1,6 +1,6 @@
 package com.perflibnetcracker.authenticationservice.DTO;
 
-import com.perflibnetcracker.authenticationservice.model.Subscription;
+import com.perflibnetcracker.authenticationservice.model.BoughtBooks;
 import com.perflibnetcracker.authenticationservice.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,19 +11,16 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class UserDTO {
+public class UserForBoughtDTO {
     private Long id;
     private String username;
-    private Set<Subscription> subscriptions;
-    private Boolean hasSub;
+    private Set<BoughtBooks> boughtBooks;
+    private Boolean bought;
 
-
-    public UserDTO(User user, Boolean hasSub) {
+    public UserForBoughtDTO(Boolean bought, User user) {
         this.id = user.getId();
         this.username = user.getUsername();
-        this.hasSub = hasSub;
-        this.subscriptions = user.getSubscriptions();
+        this.boughtBooks = user.getBoughtBooks();
+        this.bought = bought;
     }
-
 }

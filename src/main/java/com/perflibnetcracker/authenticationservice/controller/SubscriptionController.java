@@ -29,7 +29,6 @@ public class SubscriptionController {
 
     @GetMapping("${spring.urlmap}/check-subscription")
     public UserDTO userHasSub(@AuthenticationPrincipal UserDetails currentUser) {
-        System.out.println(currentUser.getUsername());
         UserDTO userDTO = subscriptionsService.hasSub(currentUser.getUsername(), LocalDateTime.now());
         return userDTO;
     }
@@ -37,7 +36,6 @@ public class SubscriptionController {
     @PostMapping("${spring.urlmap}/add-subscription/{days}")
     public ResponseEntity<User> addSubForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "days") Integer days) {
         subscriptionsService.addSub(currentUser.getUsername(), days);
-        System.out.println(currentUser.getUsername() + "нажал");
         return new ResponseEntity("Added subscription for user: " + currentUser.getUsername(), HttpStatus.OK);
     }
 }
