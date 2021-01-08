@@ -1,6 +1,6 @@
 package com.perflibnetcracker.authenticationservice.config;
 
-import com.perflibnetcracker.authenticationservice.service.implementation.UserServiceImpl;
+import com.perflibnetcracker.authenticationservice.service.implementation.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,13 +18,11 @@ import org.springframework.security.web.firewall.HttpFirewall;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    @Autowired
-    public void setUserServiceImpl(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+    public WebSecurityConfig(UserService userService) {
+        this.userService = userService;
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -35,7 +33,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/service/authentication/authenticated/**").authenticated();
     }
 
-    // Метод для дешиврования из БД
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -45,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder());
-        authenticationProvider.setUserDetailsService(userServiceImpl);
+        authenticationProvider.setUserDetailsService(userService);
         return authenticationProvider;
     }
 

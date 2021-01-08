@@ -7,40 +7,24 @@ import com.perflibnetcracker.authenticationservice.repository.BookRepository;
 import com.perflibnetcracker.authenticationservice.repository.BoughtBooksRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.BoughtService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class BoughtServiceImpl implements BoughtService {
 
-    private UserServiceImpl userService;
-    private BookRepository bookRepository;
-    private BoughtBooksRepository boughtBooksRepository;
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final BookRepository bookRepository;
+    private final BoughtBooksRepository boughtBooksRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public BoughtServiceImpl(UserService userService, BookRepository bookRepository, BoughtBooksRepository boughtBooksRepository, UserRepository userRepository) {
+        this.userService = userService;
+        this.bookRepository = bookRepository;
+        this.boughtBooksRepository = boughtBooksRepository;
         this.userRepository = userRepository;
     }
-
-    @Autowired
-    public void setBoughtService(BoughtBooksRepository boughtBooksRepository) {
-        this.boughtBooksRepository = boughtBooksRepository;
-    }
-
-    @Autowired
-    public void setUserService(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setBookRepository(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
-
 
     @Override
     public void addBookForBoughtBooks(String username, Long id) {

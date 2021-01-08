@@ -3,16 +3,11 @@ package com.perflibnetcracker.authenticationservice.controller;
 import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -20,10 +15,9 @@ import java.time.LocalDateTime;
 @CrossOrigin(origins = "${spring.frontend.url}")
 public class SubscriptionController {
 
-    private SubscriptionsService subscriptionsService;
+    private final SubscriptionsService subscriptionsService;
 
-    @Autowired
-    public void setSubscriptionsService(SubscriptionsService subscriptionsService) {
+    public SubscriptionController(SubscriptionsService subscriptionsService) {
         this.subscriptionsService = subscriptionsService;
     }
 

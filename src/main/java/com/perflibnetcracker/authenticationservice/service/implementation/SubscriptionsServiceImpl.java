@@ -6,7 +6,6 @@ import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.SubscriptionRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,19 +15,13 @@ import java.util.Set;
 @Service
 public class SubscriptionsServiceImpl implements SubscriptionsService {
 
-    private UserRepository userRepository;
-    private SubscriptionRepository subscriptionRepository;
+    private final UserRepository userRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public SubscriptionsServiceImpl(UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setSubscriptionRepository(SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
     }
-
 
     @Override
     public UserDTO hasSub(String username, LocalDateTime localDateTime) {
