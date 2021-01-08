@@ -15,7 +15,7 @@ public class RatedServiceImpl implements RatedService {
     }
 
     @Override
-    public BookDTO ratedByUser(String username, Long id) {
-        return bookRepository.findAllUserWithSubscription(username, id);
+    public BookDTO ratingByUser(String username, Long bookId) {
+        return bookRepository.findAllUserWithSubscription(username, bookId);
     }
 }

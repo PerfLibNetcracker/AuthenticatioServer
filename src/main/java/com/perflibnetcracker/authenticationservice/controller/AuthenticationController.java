@@ -60,7 +60,7 @@ public class AuthenticationController {
 
     @GetMapping("${spring.urlmap}/rated/{id_book}")
     public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book) {
-        return ratedService.ratedByUser(currentUser.getUsername(), id_book);
+        return ratedService.ratingByUser(currentUser.getUsername(), id_book);
     }
 
     @RequestMapping(value = "${spring.urlmap}/userLogout")
