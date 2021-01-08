@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void setNewRattingForBookByUser(Long id, String username) {
+    public void setNewRatingForBookByUser(Long id, String username) {
         Book book = bookRepository.getOne(id);
         User user = userService.findByUsername(username);
         Set users = book.getUsers();

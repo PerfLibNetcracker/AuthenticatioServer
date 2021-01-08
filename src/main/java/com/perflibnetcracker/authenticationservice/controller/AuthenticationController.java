@@ -86,7 +86,7 @@ public class AuthenticationController {
                                                @RequestBody Book bookDetails) {
         Double newRating = bookDetails.getRating();
         bookService.newRated(newRating, id);
-        bookService.setNewRattingForBookByUser(id, currentUser.getUsername());
+        bookService.setNewRatingForBookByUser(id, currentUser.getUsername());
         return new ResponseEntity("Rating correct!", HttpStatus.OK);
     }
 }
