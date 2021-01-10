@@ -83,8 +83,11 @@ public class AuthenticationController {
 
     @PutMapping("${spring.urlmap}/update-book/{id}")
     public ResponseEntity<Book> updateRatingForBook(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
-                                               @RequestBody Book bookDetails) {
+                                               @RequestBody Book bookDetails) throws Exception {
         Double newRating = bookDetails.getRating();
+        if(newRating == null) {
+            throw new Exception("Cannot be null!");
+        }
         bookService.newRated(newRating, id);
         bookService.setNewRatingForBookByUser(id, currentUser.getUsername());
         return new ResponseEntity("Rating correct!", HttpStatus.OK);

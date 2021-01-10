@@ -25,7 +25,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
 
     @Override
     public UserDTO hasSub(String username, LocalDateTime localDateTime) {
-        return userRepository.findUserWithSub(username, localDateTime);
+        return userRepository.findUserWithSubscriptionAndWithFreeBook(username, localDateTime);
     }
 
     @Override
@@ -33,6 +33,11 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
         LocalDateTime nowTime = LocalDateTime.now().plusDays(days);
         Subscription subscriptionForDB = new Subscription();
         subscriptionForDB.setEndTime(nowTime);
+        if (days == 7) {
+            subscriptionForDB.setFreeBook(3);
+        } else if(days == 30) {
+            subscriptionForDB.setFreeBook(5);
+        }
         subscriptionRepository.save(subscriptionForDB);
         Subscription newSub = subscriptionRepository.findOneByEndTime(nowTime);
         Set<Subscription> subscriptionsSet = new HashSet<>();

@@ -17,12 +17,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String userName);
 
     User findByUsernameAndPassword(String userName, String password);
-
-    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserDTO(u, sum(case when sub.endTime > :endTime then 1 else 0 end) > 0) from User u left join u.subscriptions sub " +
+    // Проверяет есть ли у User подписка и возможность получить бесплатно книги по подиске
+    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserDTO(u, (sum(case when sub.endTime > :endTime then 1 else 0 end) > 0), " +
+            "(sum(case when (sub.freeBook > 0 and sub.endTime > :endTime) then 1 else 0 end) > 0)) " +
+            "from User u left join u.subscriptions sub " +
             "where u.username = :username " +
             "group by u ")
-    UserDTO findUserWithSub(@Param("username") String username, @Param("endTime") LocalDateTime endTime);
-
+    UserDTO findUserWithSubscriptionAndWithFreeBook(@Param("username") String username, @Param("endTime") LocalDateTime endTime);
+    // Проверяет покупал ли User книгу
     @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO((sum(case when us_b.bookId = :bookId then 1 else 0 end) > 0), us) " +
             "from User us left join us.boughtBooks us_b " +
             "where us.username = :username " +
