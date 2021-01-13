@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class AuthenticationDTO {
-
-    private String message;
-
-    @Override
-    public String toString() {
-        return String.format("Login [message=%s]", message);
-    }
+public class SubscriptionInfoDTO {
+    private String endTime;
+    private Integer freeBook;
 }

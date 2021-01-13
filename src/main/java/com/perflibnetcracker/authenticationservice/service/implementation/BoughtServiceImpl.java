@@ -5,56 +5,50 @@ import com.perflibnetcracker.authenticationservice.model.BoughtBooks;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.BookRepository;
 import com.perflibnetcracker.authenticationservice.repository.BoughtBooksRepository;
+import com.perflibnetcracker.authenticationservice.repository.SubscriptionRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.BoughtService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class BoughtServiceImpl implements BoughtService {
 
-    private UserServiceImpl userService;
-    private BookRepository bookRepository;
-    private BoughtBooksRepository boughtBooksRepository;
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final BookRepository bookRepository;
+    private final BoughtBooksRepository boughtBooksRepository;
+    private final UserRepository userRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setBoughtService(BoughtBooksRepository boughtBooksRepository) {
-        this.boughtBooksRepository = boughtBooksRepository;
-    }
-
-    @Autowired
-    public void setUserService(UserServiceImpl userService) {
+    public BoughtServiceImpl(UserService userService, BookRepository bookRepository, BoughtBooksRepository boughtBooksRepository,
+                             UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
         this.userService = userService;
-    }
-
-    @Autowired
-    public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+        this.boughtBooksRepository = boughtBooksRepository;
+        this.userRepository = userRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
-
 
     @Override
-    public void addBookForBoughtBooks(String username, Long id) {
-        Book book = bookRepository.getOne(id);
+    public void addBookForBoughtBooks(String username, Long bookId) {
+        Book book = bookRepository.getOne(bookId);
         BoughtBooks boughtBooks = new BoughtBooks();
-        boughtBooks.setBookId(id);
+        boughtBooks.setBookId(bookId);
         boughtBooks.setName(book.getName());
         boughtBooks.setPrice(book.getPrice());
         boughtBooksRepository.save(boughtBooks);
         User user = userService.findByUsername(username);
-        Set setForBoughtBook = user.getBoughtBooks();
-        BoughtBooks newBoughtBooksForUser = boughtBooksRepository.getOne(id);
+        Set<BoughtBooks> setForBoughtBook = user.getBoughtBooks();
+        BoughtBooks newBoughtBooksForUser = boughtBooksRepository.getOne(bookId);
         setForBoughtBook.add(newBoughtBooksForUser);
         user.setBoughtBooks(setForBoughtBook);
         userRepository.save(user);
+    }
+
+    @Override
+    public void buyBookBySubscription(String username, Long bookId) {
+        subscriptionRepository.setNewValuesForFreeBook(username);
+        addBookForBoughtBooks(username, bookId);
     }
 }

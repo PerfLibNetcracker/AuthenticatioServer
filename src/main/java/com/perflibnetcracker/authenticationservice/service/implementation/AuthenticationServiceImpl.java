@@ -5,7 +5,6 @@ import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.RoleRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,27 +14,16 @@ import java.util.Set;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    public AuthenticationServiceImpl(UserRepository userRepository) {
+    public AuthenticationServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
-    // Метод реализует запись в БД нового пользователя
     public User saveUser(User user) throws Exception {
         String tempUsername = user.getUsername();
         if (tempUsername != null && !tempUsername.equals("")) {
@@ -44,14 +32,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 throw new Exception("Пользователь с именем " + tempUsername + "уже существует");
             }
         }
-        User userForDB = user;
-        userForDB.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName("ROLE_USER");
-        Set setRoles = new HashSet();
+        Set<Role> setRoles = new HashSet<>();
         setRoles.add(role);
-        userForDB.setRoles(setRoles);
-        userRepository.save(userForDB);
-        return userForDB;
+        user.setRoles(setRoles);
+        userRepository.save(user);
+        return user;
     }
 
     public User fetchUserByUsername(String userName) {

@@ -1,7 +1,7 @@
 package com.perflibnetcracker.authenticationservice.service;
 
-import com.perflibnetcracker.authenticationservice.DTO.BookDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserBookDTO;
 
 public interface RatedService {
-    BookDTO ratedByMe(String username, Long id);
+    UserBookDTO isBookRatedByUser(String username, Long bookId);
 }
