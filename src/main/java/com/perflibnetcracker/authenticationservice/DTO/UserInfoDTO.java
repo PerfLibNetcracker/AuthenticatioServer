@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class UserDTO {
+public class UserInfoDTO {
     private Long id;
     private String username;
     private Boolean hasSub;
     private Boolean hasFreeBook;
 
-    public UserDTO(User user, Boolean hasSub, Boolean hasFreeBook) {
+    public UserInfoDTO(User user, Boolean hasSub, Boolean hasFreeBook) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.hasSub = hasSub;

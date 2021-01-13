@@ -39,7 +39,7 @@ public class BoughtServiceImpl implements BoughtService {
         boughtBooks.setPrice(book.getPrice());
         boughtBooksRepository.save(boughtBooks);
         User user = userService.findByUsername(username);
-        Set setForBoughtBook = user.getBoughtBooks();
+        Set<BoughtBooks> setForBoughtBook = user.getBoughtBooks();
         BoughtBooks newBoughtBooksForUser = boughtBooksRepository.getOne(bookId);
         setForBoughtBook.add(newBoughtBooksForUser);
         user.setBoughtBooks(setForBoughtBook);

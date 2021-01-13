@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class BookDTO {
+public class UserBookDTO {
 
     private Long id;
     private String name;
-    private Boolean meRated;
+    private Boolean isRated;
 
-    public BookDTO(Book book, Boolean meRated) {
+    public UserBookDTO(Book book, Boolean isRated) {
         this.id = book.getId();
         this.name = book.getName();
-        this.meRated = meRated;
+        this.isRated = isRated;
     }
 }

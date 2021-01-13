@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService {
     public void setNewRatingForBookByUser(Long id, String username) {
         Book book = bookRepository.getOne(id);
         User user = userService.findByUsername(username);
-        Set users = book.getUsers();
+        Set<User> users = book.getUsers();
         users.add(user);
         book.setUsers(users);
         bookRepository.save(book);

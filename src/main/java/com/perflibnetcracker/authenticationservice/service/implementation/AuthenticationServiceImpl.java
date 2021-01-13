@@ -32,14 +32,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 throw new Exception("Пользователь с именем " + tempUsername + "уже существует");
             }
         }
-        User userForDB = user;
-        userForDB.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName("ROLE_USER");
-        Set setRoles = new HashSet();
+        Set<Role> setRoles = new HashSet<>();
         setRoles.add(role);
-        userForDB.setRoles(setRoles);
-        userRepository.save(userForDB);
-        return userForDB;
+        user.setRoles(setRoles);
+        userRepository.save(user);
+        return user;
     }
 
     public User fetchUserByUsername(String userName) {

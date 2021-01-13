@@ -1,6 +1,6 @@
 package com.perflibnetcracker.authenticationservice.service.implementation;
 
-import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
 import com.perflibnetcracker.authenticationservice.model.Subscription;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.SubscriptionRepository;
@@ -24,7 +24,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     }
 
     @Override
-    public UserDTO hasSub(String username, LocalDateTime localDateTime) {
+    public UserInfoDTO hasSub(String username, LocalDateTime localDateTime) {
         return userRepository.findUserWithSubscriptionAndWithFreeBook(username, localDateTime);
     }
 
@@ -35,7 +35,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
         subscriptionForDB.setEndTime(nowTime);
         if (days == 7) {
             subscriptionForDB.setFreeBook(3);
-        } else if(days == 30) {
+        } else if (days == 30) {
             subscriptionForDB.setFreeBook(5);
         }
         subscriptionRepository.save(subscriptionForDB);

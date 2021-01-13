@@ -2,8 +2,8 @@ package com.perflibnetcracker.authenticationservice.controller;
 
 
 import com.perflibnetcracker.authenticationservice.DTO.AuthenticationDTO;
-import com.perflibnetcracker.authenticationservice.DTO.BookDTO;
-import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserBookDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
 import com.perflibnetcracker.authenticationservice.mappers.UserMapper;
 import com.perflibnetcracker.authenticationservice.model.Book;
 import com.perflibnetcracker.authenticationservice.model.User;
@@ -16,7 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -48,23 +55,21 @@ public class AuthenticationController {
 
     @PostMapping("${spring.urlmap}/registration")
     public User newUser(@RequestBody User user) throws Exception {
-        User userObj = authenticationService.saveUser(user);
-        return userObj;
+        return authenticationService.saveUser(user);
     }
 
     @GetMapping("${spring.urlmap}/{id}")
-    public UserDTO getUser(@PathVariable Long id) {
-        User user = userService.getUser(id);
-        return userMapper.userToDTO(user);
+    public UserInfoDTO getUser(@PathVariable Long id) {
+        return userMapper.userToDTO(userService.getUser(id));
     }
 
-    @GetMapping("${spring.urlmap}/rated/{id_book}")
-    public BookDTO getRatedForUser(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long id_book) {
-        return ratedService.ratingByUser(currentUser.getUsername(), id_book);
+    @GetMapping("${spring.urlmap}/user-book-rated/{bookId}")
+    public UserBookDTO getRatedUserBooks(@AuthenticationPrincipal UserDetails currentUser, @PathVariable Long bookId) {
+        return ratedService.isBookRatedByUser(currentUser.getUsername(), bookId);
     }
 
     @RequestMapping(value = "${spring.urlmap}/userLogout")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         SecurityContextHolder.clearContext();
         if (session != null) {
@@ -78,18 +83,18 @@ public class AuthenticationController {
         System.out.println("logout" + SecurityContextHolder.getContext().getAuthentication());
         SecurityContextHolder.clearContext();
         System.out.println("logout context" + SecurityContextHolder.getContext());
-        return new ResponseEntity("Logout Successful!", HttpStatus.OK);
+        return new ResponseEntity<>("Logout Successful!", HttpStatus.OK);
     }
 
     @PutMapping("${spring.urlmap}/update-book/{id}")
-    public ResponseEntity<Book> updateRatingForBook(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
-                                               @RequestBody Book bookDetails) throws Exception {
+    public ResponseEntity<String> updateRatingForBook(@AuthenticationPrincipal UserDetails currentUser, @PathVariable(value = "id") Long id,
+                                                      @RequestBody Book bookDetails) throws Exception {
         Double newRating = bookDetails.getRating();
-        if(newRating == null) {
+        if (newRating == null) {
             throw new Exception("Cannot be null!");
         }
         bookService.newRated(newRating, id);
         bookService.setNewRatingForBookByUser(id, currentUser.getUsername());
-        return new ResponseEntity("Rating correct!", HttpStatus.OK);
+        return new ResponseEntity<>("Rating correct!", HttpStatus.OK);
     }
 }

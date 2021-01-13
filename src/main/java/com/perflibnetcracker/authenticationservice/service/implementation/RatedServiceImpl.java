@@ -1,6 +1,6 @@
 package com.perflibnetcracker.authenticationservice.service.implementation;
 
-import com.perflibnetcracker.authenticationservice.DTO.BookDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserBookDTO;
 import com.perflibnetcracker.authenticationservice.repository.BookRepository;
 import com.perflibnetcracker.authenticationservice.service.RatedService;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class RatedServiceImpl implements RatedService {
     }
 
     @Override
-    public BookDTO ratingByUser(String username, Long bookId) {
-        return bookRepository.findAllUserWithSubscription(username, bookId);
+    public UserBookDTO isBookRatedByUser(String username, Long bookId) {
+        return bookRepository.findUserWithSubscription(username, bookId);
     }
 }

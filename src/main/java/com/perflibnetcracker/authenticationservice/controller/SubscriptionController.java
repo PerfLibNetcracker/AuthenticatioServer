@@ -1,7 +1,7 @@
 package com.perflibnetcracker.authenticationservice.controller;
 
 import com.perflibnetcracker.authenticationservice.DTO.SubscriptionInfoDTO;
-import com.perflibnetcracker.authenticationservice.DTO.UserDTO;
+import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.SubscriptionRepository;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
@@ -9,7 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,9 +31,8 @@ public class SubscriptionController {
     }
 
     @GetMapping("${spring.urlmap}/check-subscription")
-    public UserDTO userHasSub(@AuthenticationPrincipal UserDetails currentUser) {
-        UserDTO userDTO = subscriptionsService.hasSub(currentUser.getUsername(), LocalDateTime.now());
-        return userDTO;
+    public UserInfoDTO userHasSub(@AuthenticationPrincipal UserDetails currentUser) {
+        return subscriptionsService.hasSub(currentUser.getUsername(), LocalDateTime.now());
     }
 
     @GetMapping("${spring.urlmap}/check-subscription-info")
