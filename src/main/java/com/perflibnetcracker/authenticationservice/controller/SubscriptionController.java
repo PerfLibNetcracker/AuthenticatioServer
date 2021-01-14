@@ -38,7 +38,7 @@ public class SubscriptionController {
     @GetMapping("${spring.urlmap}/check-subscription-info")
     public SubscriptionInfoDTO subscriptionInfo(@AuthenticationPrincipal UserDetails currentUser) {
         Integer countFreeBooks = subscriptionRepository.getCountFreeBooksByUsername(currentUser.getUsername());
-        LocalDateTime endTimeSubscription = subscriptionRepository.getEndTimeByUsername(currentUser.getUsername());
+        LocalDateTime endTimeSubscription = subscriptionRepository.getEndTimeByUsername(currentUser.getUsername()).toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return new SubscriptionInfoDTO(endTimeSubscription.format(formatter), countFreeBooks);
     }

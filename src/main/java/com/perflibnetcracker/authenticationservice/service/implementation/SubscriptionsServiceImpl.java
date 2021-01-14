@@ -8,6 +8,7 @@ import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     public void addSub(String username, Integer days) {
         LocalDateTime nowTime = LocalDateTime.now().plusDays(days);
         Subscription subscriptionForDB = new Subscription();
-        subscriptionForDB.setEndTime(nowTime);
+        subscriptionForDB.setEndTime(Timestamp.valueOf(nowTime));
         if (days == 7) {
             subscriptionForDB.setFreeBook(3);
         } else if (days == 30) {

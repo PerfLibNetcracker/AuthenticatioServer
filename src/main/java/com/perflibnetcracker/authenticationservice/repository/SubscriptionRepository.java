@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Repository
 @Transactional
-public interface SubscriptionRepository extends JpaRepository<Subscription, Integer> {
+public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     Subscription findOneByEndTime(LocalDateTime time);
 
     @Modifying
@@ -20,7 +21,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Inte
     void setNewValuesForFreeBook(@Param("username") String username);
 
     @Query("SELECT sub1.endTime FROM Subscription sub1 WHERE sub1.subId = (SELECT sub.subId from User u left join u.subscriptions sub where u.username = :username group by sub)")
-    LocalDateTime getEndTimeByUsername(@Param("username") String username);
+    Timestamp getEndTimeByUsername(@Param("username") String username);
 
     @Query("SELECT sub1.freeBook FROM Subscription sub1 WHERE sub1.subId = (SELECT sub.subId from User u left join u.subscriptions sub where u.username = :username group by sub)")
     Integer getCountFreeBooksByUsername(@Param("username") String username);
