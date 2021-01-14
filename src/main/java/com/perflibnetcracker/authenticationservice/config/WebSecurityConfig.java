@@ -1,7 +1,6 @@
 package com.perflibnetcracker.authenticationservice.config;
 
 import com.perflibnetcracker.authenticationservice.service.implementation.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/**").authenticated();
+                .antMatchers(HttpMethod.GET, "/api/service/authentication/authenticated/**").authenticated();
     }
 
     @Bean
