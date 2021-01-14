@@ -40,7 +40,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
             subscriptionForDB.setFreeBook(5);
         }
         subscriptionRepository.save(subscriptionForDB);
-        Subscription newSub = subscriptionRepository.findOneByEndTime(nowTime);
+        Subscription newSub = subscriptionRepository.findOneByEndTime(Timestamp.valueOf(nowTime));
         Set<Subscription> subscriptionsSet = new HashSet<>();
         subscriptionsSet.add(newSub);
         User user = userRepository.findByUsername(username);

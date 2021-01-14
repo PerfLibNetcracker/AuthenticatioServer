@@ -9,12 +9,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Repository
 @Transactional
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
-    Subscription findOneByEndTime(LocalDateTime time);
+    Subscription findOneByEndTime(Timestamp endTime);
 
     @Modifying
     @Query("UPDATE Subscription sub1 SET sub1.freeBook=sub1.freeBook - 1 WHERE sub1.subId = (SELECT sub.subId from User u left join u.subscriptions sub where u.username = :username group by sub)")
