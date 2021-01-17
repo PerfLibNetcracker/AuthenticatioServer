@@ -7,10 +7,10 @@ import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
 import com.perflibnetcracker.authenticationservice.mappers.UserMapper;
 import com.perflibnetcracker.authenticationservice.model.Book;
 import com.perflibnetcracker.authenticationservice.model.User;
+import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.AuthenticationService;
 import com.perflibnetcracker.authenticationservice.service.BookService;
 import com.perflibnetcracker.authenticationservice.service.RatedService;
-import com.perflibnetcracker.authenticationservice.service.implementation.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,14 +35,14 @@ import javax.servlet.http.HttpSession;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final BookService bookService;
     private final RatedService ratedService;
 
-    public AuthenticationController(AuthenticationService authenticationService, UserService userService, UserMapper userMapper, BookService bookService, RatedService ratedService) {
+    public AuthenticationController(AuthenticationService authenticationService, UserRepository userRepository, UserMapper userMapper, BookService bookService, RatedService ratedService) {
         this.authenticationService = authenticationService;
-        this.userService = userService;
+        this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.bookService = bookService;
         this.ratedService = ratedService;
@@ -60,7 +60,7 @@ public class AuthenticationController {
 
     @GetMapping("${spring.urlmap}/{id}")
     public UserInfoDTO getUser(@PathVariable Long id) {
-        return userMapper.userToDTO(userService.getUser(id));
+        return userMapper.userToDTO(userRepository.findById(id).orElseThrow());
     }
 
     @GetMapping("${spring.urlmap}/user-book-rated/{bookId}")

@@ -3,7 +3,6 @@ package com.perflibnetcracker.authenticationservice.service.implementation;
 import com.perflibnetcracker.authenticationservice.model.Role;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +27,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getUser(Long id) {
-        return userRepository.getById(id);
+        return userRepository.findById(id).orElseThrow();
     }
 
     @Override

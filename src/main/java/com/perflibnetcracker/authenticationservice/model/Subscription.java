@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -29,6 +28,8 @@ public class Subscription {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
+    // TODO(Kuptsov) MAJOR: Переименовать - это кол-во бесплатных книг, а не бесплатная
+    //  книга, не забыть про миграции (alter table) и dto на стороне фронта
     @Column(name = "free_book")
     private Integer freeBook;
 

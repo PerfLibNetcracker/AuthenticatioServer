@@ -16,6 +16,8 @@ public class UserBoughtBooksDTO {
     private Long id;
     private String username;
     private Set<BoughtBooks> boughtBooks;
+    // TODO(Kuptsov): Зачем переменная bought если у нас есть boughtBooks?
+    //  можно же по ней определить куплены ли книги
     private Boolean bought;
 
     public UserBoughtBooksDTO(Boolean bought, User user) {

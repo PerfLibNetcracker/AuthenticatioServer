@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class UserInfoDTO {
     private Long id;
     private String username;
@@ -20,5 +19,10 @@ public class UserInfoDTO {
         this.username = user.getUsername();
         this.hasSub = hasSub;
         this.hasFreeBook = hasFreeBook;
+    }
+
+    public UserInfoDTO(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
     }
 }
