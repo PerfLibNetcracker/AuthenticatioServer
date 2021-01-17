@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/service/authentication/authenticated/**").authenticated();
+                .antMatchers(HttpMethod.GET, "/**").authenticated();
     }
 
     @Bean
