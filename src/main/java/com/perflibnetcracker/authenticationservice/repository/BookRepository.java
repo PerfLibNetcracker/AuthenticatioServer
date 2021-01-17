@@ -11,15 +11,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserBookDTO" +
-            "(book, " +
-            "case when us.username = :username " +
-            "   then true " +
-            "   else false " +
-            "end) " +
-            "from Book book left join book.users us " +
-            "where book.id = :id " +
-            "group by book ")
+    @Query("select new com.perflibnetcracker.authenticationservice.DTO.BookDTO(" +
+            "b, " +
+            "sum(case when us.username = :username then 1 else 0 end) > 0) " +
+            "from Book b left join b.users us " +
+            "where b.id = :id " +
+            "group by b ")
     UserBookDTO findUserWithSubscription(@Param("username") String username, @Param("id") Long id);
 
     @Modifying

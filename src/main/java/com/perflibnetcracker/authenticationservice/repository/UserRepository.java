@@ -18,16 +18,35 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsernameAndPassword(String userName, String password);
 
-    // Проверяет есть ли у User подписка и возможность получить бесплатно книги по подиске
-    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO(u, (sum(case when sub.endTime > :endTime then 1 else 0 end) > 0), " +
+    /**
+     * Проверяет есть ли у User подписка и возможность получить бесплатно книги по подиске
+     * <p>
+     * P.S sum(case и т.д в запросе выводит просто true/false, упросить тут нельзя
+     * из-за оссобенностей hql.
+     *
+     * @param username
+     * @param endTime
+     * @return
+     */
+    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO(" +
+            "u, " +
+            "(sum(case when sub.endTime > :endTime then 1 else 0 end) > 0), " +
             "(sum(case when (sub.freeBook > 0 and sub.endTime > :endTime) then 1 else 0 end) > 0)) " +
             "from User u left join u.subscriptions sub " +
             "where u.username = :username " +
             "group by u ")
     UserInfoDTO findUserWithSubscriptionAndWithFreeBook(@Param("username") String username, @Param("endTime") LocalDateTime endTime);
 
-    // Проверяет покупал ли User книгу
-    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO((sum(case when us_b.bookId = :bookId then 1 else 0 end) > 0), us) " +
+    /**
+     * Проверяет покупал ли User книгу
+     *
+     * @param username
+     * @param bookId
+     * @return
+     */
+    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO(" +
+            "(sum(case when us_b.bookId = :bookId then 1 else 0 end) > 0), " +
+            "us) " +
             "from User us left join us.boughtBooks us_b " +
             "where us.username = :username " +
             "group by us ")

@@ -16,12 +16,33 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     Subscription findOneByEndTime(LocalDateTime endTime);
 
     @Modifying
-    @Query("UPDATE Subscription sub1 SET sub1.freeBook=sub1.freeBook - 1 WHERE sub1.subId = (SELECT sub.subId from User u left join u.subscriptions sub where u.username = :username group by sub)")
+    @Query("UPDATE Subscription sub1 " +
+            "SET sub1.freeBook=sub1.freeBook - 1 " +
+            "WHERE sub1.subId = " +
+            "   (SELECT sub.subId " +
+            "   from User u " +
+            "   left join u.subscriptions sub" +
+            "   where u.username = :username " +
+            "   group by sub)")
     void setNewValuesForFreeBook(@Param("username") String username);
 
-    @Query("SELECT sub1.endTime FROM Subscription sub1 WHERE sub1.subId = (SELECT sub.subId from User u left join u.subscriptions sub where u.username = :username group by sub)")
+    @Query("SELECT sub1.endTime F" +
+            "ROM Subscription sub1 " +
+            "WHERE sub1.subId = " +
+            "   (SELECT sub.subId " +
+            "   from User u " +
+            "   left join u.subscriptions sub " +
+            "   where u.username = :username " +
+            "   group by sub)")
     LocalDateTime getEndTimeByUsername(@Param("username") String username);
 
-    @Query("SELECT sub1.freeBook FROM Subscription sub1 WHERE sub1.subId = (SELECT sub.subId from User u left join u.subscriptions sub where u.username = :username group by sub)")
+    @Query("SELECT sub1.freeBook " +
+            "FROM Subscription sub1 " +
+            "WHERE sub1.subId = " +
+            "   (SELECT sub.subId " +
+            "   from User u " +
+            "   left join u.subscriptions sub " +
+            "   where u.username = :username " +
+            "   group by sub)")
     Integer getCountFreeBooksByUsername(@Param("username") String username);
 }
