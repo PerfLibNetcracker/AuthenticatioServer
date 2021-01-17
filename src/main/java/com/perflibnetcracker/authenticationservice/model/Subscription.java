@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class Subscription {
 
     @Column(name = "end_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "free_book")
     private Integer freeBook;

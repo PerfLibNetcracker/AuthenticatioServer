@@ -33,14 +33,14 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     public void addSub(String username, Integer days) {
         LocalDateTime nowTime = LocalDateTime.now().plusDays(days);
         Subscription subscriptionForDB = new Subscription();
-        subscriptionForDB.setEndTime(Timestamp.valueOf(nowTime));
+        subscriptionForDB.setEndTime(LocalDateTime.now());
         if (days == 7) {
             subscriptionForDB.setFreeBook(3);
         } else if (days == 30) {
             subscriptionForDB.setFreeBook(5);
         }
         subscriptionRepository.save(subscriptionForDB);
-        Subscription newSub = subscriptionRepository.findOneByEndTime(Timestamp.valueOf(nowTime));
+        Subscription newSub = subscriptionRepository.findOneByEndTime(nowTime);
         Set<Subscription> subscriptionsSet = new HashSet<>();
         subscriptionsSet.add(newSub);
         User user = userRepository.findByUsername(username);
