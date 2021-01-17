@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("select new com.perflibnetcracker.authenticationservice.DTO.BookDTO(" +
+    @Query("select new com.perflibnetcracker.authenticationservice.DTO.UserBookDTO(" +
             "b, " +
             "sum(case when us.username = :username then 1 else 0 end) > 0) " +
             "from Book b left join b.users us " +
