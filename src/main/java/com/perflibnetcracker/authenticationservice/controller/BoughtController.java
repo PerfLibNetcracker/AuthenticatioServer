@@ -26,10 +26,10 @@ public class BoughtController {
     }
 
 
-    @GetMapping("${spring.urlmap}/check-bought/{id_book}")
+    @GetMapping("${spring.urlmap}/check-bought/{bookId}")
     public UserBoughtBooksDTO userBoughtBooks(@AuthenticationPrincipal UserDetails currentUser,
-                                              @PathVariable Long id_book) {
-        return userRepository.findUserBought(currentUser.getUsername(), id_book);
+                                              @PathVariable Long bookId) {
+        return boughtService.getUserBoughtBooksDTO(currentUser.getUsername(), bookId);
     }
 
     @PostMapping("${spring.urlmap}/add-book-for-bought-books/{id_book}")

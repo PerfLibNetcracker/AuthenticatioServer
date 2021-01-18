@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "bought_books", schema = "auth_service")
-public class BoughtBooks {
+@Table(name = "bought_book", schema = "auth_service")
+public class BoughtBook {
     @Id
     @Column(name = "book_id")
     private Long bookId;

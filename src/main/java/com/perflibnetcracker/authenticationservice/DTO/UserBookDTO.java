@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class UserBookDTO {
-
     private Long id;
     private String name;
     private Boolean isRated;

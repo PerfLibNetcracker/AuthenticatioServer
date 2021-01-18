@@ -6,13 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -20,19 +19,18 @@ import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "users", schema = "auth_service")
 @JsonIdentityInfo(
         property = "id",
         generator = ObjectIdGenerators.PropertyGenerator.class
 )
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity {
     private String username;
     private String password;
     private String email;
@@ -54,5 +52,5 @@ public class User {
     @JoinTable(name = "users_bought_books",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "bought_books_id"))
-    private Set<BoughtBooks> boughtBooks = new HashSet<>();
+    private Set<BoughtBook> boughtBooks = new HashSet<>();
 }

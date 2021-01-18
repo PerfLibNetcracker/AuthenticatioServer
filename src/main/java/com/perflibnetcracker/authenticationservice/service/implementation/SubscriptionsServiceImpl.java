@@ -1,5 +1,6 @@
 package com.perflibnetcracker.authenticationservice.service.implementation;
 
+import com.perflibnetcracker.authenticationservice.DTO.SubscriptionInfoDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
 import com.perflibnetcracker.authenticationservice.model.Subscription;
 import com.perflibnetcracker.authenticationservice.model.User;
@@ -8,14 +9,13 @@ import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.Set;
 
 @Service
 public class SubscriptionsServiceImpl implements SubscriptionsService {
-
     private final UserRepository userRepository;
     private final SubscriptionRepository subscriptionRepository;
 
@@ -24,27 +24,57 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
         this.subscriptionRepository = subscriptionRepository;
     }
 
+    // TODO(Kuptsov) MINOR: В случае если будут несколько подписок,
+    //  нужно подумать о том как это будет работать
     @Override
-    public UserInfoDTO hasSub(String username, LocalDateTime localDateTime) {
-        return userRepository.findUserWithSubscriptionAndWithFreeBook(username, localDateTime);
+    public UserInfoDTO getUserInfoDTOByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        Set<Subscription> subscriptions = user.getSubscriptions();
+        UserInfoDTO userInfoDTO = new UserInfoDTO(user);
+        if (subscriptions.size() > 0) {
+            Subscription subscription = subscriptions
+                    .stream()
+                    .findFirst()
+                    .get();
+            if (subscription.getEndTime().isBefore(LocalDateTime.now())) {
+                userInfoDTO.setHasSub(true);
+            }
+            if (subscription.getFreeBookCount() > 0) {
+                userInfoDTO.setHasFreeBook(true);
+            }
+        }
+        return userInfoDTO;
     }
 
     @Override
-    public void addSub(String username, Integer days) {
-        LocalDateTime nowTime = LocalDateTime.now().plusDays(days);
+    public void addSubscriptionToUser(String username, Integer days) {
         Subscription subscriptionForDB = new Subscription();
-        subscriptionForDB.setEndTime(Timestamp.valueOf(nowTime));
+        subscriptionForDB.setEndTime(LocalDateTime.now());
         if (days == 7) {
-            subscriptionForDB.setFreeBook(3);
+            //TODO(Kuptsov) MINOR: В идеале нужно вынести кол-во беспл. книг в конфигурационные файлы
+            subscriptionForDB.setFreeBookCount(3);
         } else if (days == 30) {
-            subscriptionForDB.setFreeBook(5);
+            subscriptionForDB.setFreeBookCount(5);
         }
-        subscriptionRepository.save(subscriptionForDB);
-        Subscription newSub = subscriptionRepository.findOneByEndTime(Timestamp.valueOf(nowTime));
-        Set<Subscription> subscriptionsSet = new HashSet<>();
-        subscriptionsSet.add(newSub);
         User user = userRepository.findByUsername(username);
-        user.setSubscriptions(subscriptionsSet);
+        user.getSubscriptions().add(subscriptionForDB);
         userRepository.save(user);
+    }
+
+    @Override
+    public SubscriptionInfoDTO getSubscriptionInfoDTOByUsername(String username) {
+        Collection<Subscription> subscriptions = subscriptionRepository.getSubscriptionsByUsername(username);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        SubscriptionInfoDTO subscriptionInfoDTO = new SubscriptionInfoDTO();
+        if (subscriptions.size() > 0) {
+            // TODO(Kuptsov) MINOR: Подумать что делать тут если будут несколько подписок
+            Subscription subscription = subscriptions
+                    .stream()
+                    .findFirst()
+                    .get();
+            subscriptionInfoDTO.setEndTime(subscription.getEndTime().format(formatter));
+            subscriptionInfoDTO.setFreeBookCount(subscription.getFreeBookCount());
+        }
+        return subscriptionInfoDTO;
     }
 }
