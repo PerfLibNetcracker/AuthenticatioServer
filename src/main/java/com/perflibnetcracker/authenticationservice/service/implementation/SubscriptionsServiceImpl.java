@@ -36,7 +36,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
                     .stream()
                     .findFirst()
                     .get();
-            if (subscription.getEndTime().isBefore(LocalDateTime.now())) {
+            if (subscription.getEndTime().isAfter(LocalDateTime.now())) {
                 userInfoDTO.setHasSub(true);
             }
             if (subscription.getFreeBookCount() > 0) {
@@ -49,7 +49,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     @Override
     public void addSubscriptionToUser(String username, Integer days) {
         Subscription subscriptionForDB = new Subscription();
-        subscriptionForDB.setEndTime(LocalDateTime.now());
+        subscriptionForDB.setEndTime(LocalDateTime.now().plusDays(days));
         if (days == 7) {
             //TODO(Kuptsov) MINOR: В идеале нужно вынести кол-во беспл. книг в конфигурационные файлы
             subscriptionForDB.setFreeBookCount(3);
@@ -72,8 +72,10 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
                     .stream()
                     .findFirst()
                     .get();
-            subscriptionInfoDTO.setEndTime(subscription.getEndTime().format(formatter));
-            subscriptionInfoDTO.setFreeBookCount(subscription.getFreeBookCount());
+            if (subscription.getEndTime().isAfter(LocalDateTime.now())) {
+                subscriptionInfoDTO.setEndTime(subscription.getEndTime().format(formatter));
+                subscriptionInfoDTO.setFreeBookCount(subscription.getFreeBookCount());
+            }
         }
         return subscriptionInfoDTO;
     }
