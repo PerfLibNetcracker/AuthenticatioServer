@@ -2,6 +2,7 @@ package com.perflibnetcracker.authenticationservice.service.implementation;
 
 import com.perflibnetcracker.authenticationservice.DTO.SubscriptionInfoDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
+import com.perflibnetcracker.authenticationservice.exceptions.AlreadyHasSubscriptionException;
 import com.perflibnetcracker.authenticationservice.model.Subscription;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.SubscriptionRepository;
@@ -13,6 +14,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Set;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service
 public class SubscriptionsServiceImpl implements SubscriptionsService {
@@ -47,7 +51,21 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     }
 
     @Override
-    public void addSubscriptionToUser(String username, Integer days) {
+    public void addSubscriptionToUser(String username, Integer days) throws AlreadyHasSubscriptionException {
+        User user = userRepository.findByUsername(username);
+        if (isNull(user)) {
+            throw new NullPointerException("USER не был найден по Username");
+        }
+        if (user.getSubscriptions().size() > 0) {
+            // TODO(Kuptsov) MINOR: Подумать что делать тут если будут несколько подписок
+            Subscription subscription = user.getSubscriptions()
+                    .stream()
+                    .findFirst()
+                    .orElse(null);
+            if (nonNull(subscription) && subscription.getEndTime().isAfter(LocalDateTime.now())) {
+                throw new AlreadyHasSubscriptionException("User под именем " + username + " уже имеет подписку");
+            }
+        }
         Subscription subscriptionForDB = new Subscription();
         subscriptionForDB.setEndTime(LocalDateTime.now().plusDays(days));
         if (days == 7) {
@@ -56,7 +74,9 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
         } else if (days == 30) {
             subscriptionForDB.setFreeBookCount(5);
         }
-        User user = userRepository.findByUsername(username);
+        // TODO(Kuptsov) MINOR: Хорошо бы обьединить как-то подписки и купленные книги по подписке
+        //  может закинуть купленные книги подписок в подписки?
+        user.getBoughtBooks().clear();
         user.getSubscriptions().add(subscriptionForDB);
         userRepository.save(user);
     }
