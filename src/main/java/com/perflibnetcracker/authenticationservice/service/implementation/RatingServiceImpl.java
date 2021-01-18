@@ -3,17 +3,17 @@ package com.perflibnetcracker.authenticationservice.service.implementation;
 import com.perflibnetcracker.authenticationservice.DTO.UserBookDTO;
 import com.perflibnetcracker.authenticationservice.model.Book;
 import com.perflibnetcracker.authenticationservice.repository.BookRepository;
-import com.perflibnetcracker.authenticationservice.service.RatedService;
+import com.perflibnetcracker.authenticationservice.service.RatingService;
 import org.springframework.stereotype.Service;
 
 import static java.util.Objects.nonNull;
 
 @Service
-public class RatedServiceImpl implements RatedService {
+public class RatingServiceImpl implements RatingService {
 
     private final BookRepository bookRepository;
 
-    public RatedServiceImpl(BookRepository bookRepository) {
+    public RatingServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 

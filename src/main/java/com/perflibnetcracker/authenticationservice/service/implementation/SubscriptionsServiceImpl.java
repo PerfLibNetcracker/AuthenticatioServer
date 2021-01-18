@@ -39,7 +39,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
             if (subscription.getEndTime().isBefore(LocalDateTime.now())) {
                 userInfoDTO.setHasSub(true);
             }
-            if (subscription.getFreeBook() > 0) {
+            if (subscription.getFreeBookCount() > 0) {
                 userInfoDTO.setHasFreeBook(true);
             }
         }
@@ -52,9 +52,9 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
         subscriptionForDB.setEndTime(LocalDateTime.now());
         if (days == 7) {
             //TODO(Kuptsov) MINOR: В идеале нужно вынести кол-во беспл. книг в конфигурационные файлы
-            subscriptionForDB.setFreeBook(3);
+            subscriptionForDB.setFreeBookCount(3);
         } else if (days == 30) {
-            subscriptionForDB.setFreeBook(5);
+            subscriptionForDB.setFreeBookCount(5);
         }
         User user = userRepository.findByUsername(username);
         user.getSubscriptions().add(subscriptionForDB);
@@ -73,7 +73,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
                     .findFirst()
                     .get();
             subscriptionInfoDTO.setEndTime(subscription.getEndTime().format(formatter));
-            subscriptionInfoDTO.setFreeBook(subscription.getFreeBook());
+            subscriptionInfoDTO.setFreeBookCount(subscription.getFreeBookCount());
         }
         return subscriptionInfoDTO;
     }

@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SubscriptionInfoDTO {
     private String endTime;
-    private Integer freeBook;
+    private Integer freeBookCount;
 }

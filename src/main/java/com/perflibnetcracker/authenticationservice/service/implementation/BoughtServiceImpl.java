@@ -2,7 +2,7 @@ package com.perflibnetcracker.authenticationservice.service.implementation;
 
 import com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO;
 import com.perflibnetcracker.authenticationservice.model.Book;
-import com.perflibnetcracker.authenticationservice.model.BoughtBooks;
+import com.perflibnetcracker.authenticationservice.model.BoughtBook;
 import com.perflibnetcracker.authenticationservice.model.Subscription;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.BookRepository;
@@ -39,12 +39,12 @@ public class BoughtServiceImpl implements BoughtService {
     @Override
     public void addBookForBoughtBooks(String username, Long bookId) {
         Book book = bookRepository.getOne(bookId);
-        BoughtBooks boughtBooks = new BoughtBooks();
-        boughtBooks.setBookId(bookId);
-        boughtBooks.setName(book.getName());
-        boughtBooks.setPrice(book.getPrice());
+        BoughtBook boughtBook = new BoughtBook();
+        boughtBook.setBookId(book.getId());
+        boughtBook.setName(book.getName());
+        boughtBook.setPrice(book.getPrice());
         User user = userService.findByUsername(username);
-        user.getBoughtBooks().add(boughtBooks);
+        user.getBoughtBooks().add(boughtBook);
         userRepository.save(user);
     }
 
@@ -62,7 +62,7 @@ public class BoughtServiceImpl implements BoughtService {
                     .anyMatch(boughtBook -> boughtBook.getBookId().equals(bookId))) {
                 return;
             }
-            subscription.setFreeBook(subscription.getFreeBook() - 1);
+            subscription.setFreeBookCount(subscription.getFreeBookCount() - 1);
             subscriptionRepository.save(subscription);
         }
         addBookForBoughtBooks(username, bookId);

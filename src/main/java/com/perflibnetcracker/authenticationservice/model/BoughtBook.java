@@ -14,10 +14,8 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "bought_books", schema = "auth_service")
-// TODO(Kuptsov): Почему оно названо BoughtBooks, если речь идёт об одной купленной книге?
-//  Логичнее было бы убрать 's в конце
-public class BoughtBooks {
+@Table(name = "bought_book", schema = "auth_service")
+public class BoughtBook {
     @Id
     @Column(name = "book_id")
     private Long bookId;

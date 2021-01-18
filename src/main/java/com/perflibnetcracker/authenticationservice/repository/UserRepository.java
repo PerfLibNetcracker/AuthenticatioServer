@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return
      */
     @Query(value = "select count(bb) > 0 from auth_service.users u " +
-            "join auth_service.bought_books bb on bb.book_id = :book_id " +
+            "join auth_service.bought_book bb on bb.book_id = :book_id " +
             "join auth_service.users_bought_books ubb on ubb.user_id = u.id and ubb.bought_books_id = bb.book_id " +
             "where u.username = :username", nativeQuery = true)
     Boolean hasUserBoughtBook(@Param("username") String username, @Param("book_id") Long bookId);

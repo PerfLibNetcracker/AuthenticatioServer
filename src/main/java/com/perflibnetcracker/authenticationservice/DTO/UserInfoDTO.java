@@ -14,13 +14,6 @@ public class UserInfoDTO {
     private Boolean hasSub;
     private Boolean hasFreeBook;
 
-    public UserInfoDTO(User user, Boolean hasSub, Boolean hasFreeBook) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.hasSub = hasSub;
-        this.hasFreeBook = hasFreeBook;
-    }
-
     public UserInfoDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();

@@ -6,32 +6,26 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
+@SuperBuilder
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "roles")
-@EqualsAndHashCode(of = {"name"})
+@EqualsAndHashCode(of = {"name"}, callSuper = true)
 @ToString
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Role extends BaseEntity {
     private String name;
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
-
 }

@@ -7,7 +7,6 @@ import com.perflibnetcracker.authenticationservice.service.BookService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -21,7 +20,6 @@ public class BookServiceImpl implements BookService {
         this.bookRepository = bookRepository;
     }
 
-
     @Override
     public void newRated(Double newRat, Long id) {
         bookRepository.setBookForRatting(newRat, id);
@@ -31,9 +29,7 @@ public class BookServiceImpl implements BookService {
     public void setNewRatingForBookByUser(Long id, String username) {
         Book book = bookRepository.getOne(id);
         User user = userService.findByUsername(username);
-        Set<User> users = book.getUsers();
-        users.add(user);
-        book.setUsers(users);
+        book.getRatedUsers().add(user);
         bookRepository.save(book);
     }
 }
