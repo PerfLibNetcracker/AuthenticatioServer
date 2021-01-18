@@ -40,10 +40,10 @@ public class Book {
 
     @Column(name = "url_image")
     private String urlImage;
-
+    // TODO(Kuptsov) MAJOR: Убрать за ненадобностью, проследить что фронт согласован с этим
     @Column(name = "genre_id")
     private Long genreId;
-
+    // TODO(Kuptsov) MAJOR: Убрать за ненадобностью, проследить что фронт согласован с этим
     @Column(name = "author_id")
     private Long authorId;
 
@@ -54,7 +54,7 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id", insertable = false, updatable = false)
     private Genre genre;
-
+    // TODO(Kutpsov) MAJOR: Переименовать в ratedUsers
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "books_user",
