@@ -41,8 +41,8 @@ public class RatingController {
         if (newRating == null) {
             throw new Exception("Cannot be null!");
         }
-        bookService.newRated(newRating, id);
-        bookService.setNewRatingForBookByUser(id, currentUser.getUsername());
+        bookService.newRatingForBookById(newRating, id);
+        bookService.setUserRatedBook(id, currentUser.getUsername());
         return new ResponseEntity<>("Rating correct!", HttpStatus.OK);
     }
 }
