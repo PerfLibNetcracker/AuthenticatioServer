@@ -46,7 +46,9 @@ public class Book extends BaseEntity implements Serializable {
     @JoinColumn(name = "genre_id", insertable = false, updatable = false)
     private Genre genre;
 
-    // TODO(Kutpsov) MAJOR: Переименовать в ratedUsers
+    @Column(name = "release_year")
+    private Long releaseYear;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "rated_users_book",
