@@ -3,7 +3,6 @@ package com.perflibnetcracker.authenticationservice.controller;
 import com.perflibnetcracker.authenticationservice.DTO.SubscriptionInfoDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
 import com.perflibnetcracker.authenticationservice.exceptions.UserAlreadyHasSubscriptionException;
-import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +34,10 @@ public class SubscriptionController {
     }
 
     @PostMapping("${spring.urlmap}/add-subscription/{days}")
-    public ResponseEntity<User> addSubForUser(@AuthenticationPrincipal UserDetails currentUser,
-                                              @PathVariable(value = "days") Integer days)
+    public ResponseEntity<String> addSubForUser(@AuthenticationPrincipal UserDetails currentUser,
+                                                @PathVariable(value = "days") Integer days)
             throws UserAlreadyHasSubscriptionException {
         subscriptionsService.addSubscriptionToUser(currentUser.getUsername(), days);
-        return new ResponseEntity("Added subscription for user: " + currentUser.getUsername(), HttpStatus.OK);
+        return new ResponseEntity<>("Added subscription for user: " + currentUser.getUsername(), HttpStatus.OK);
     }
 }
