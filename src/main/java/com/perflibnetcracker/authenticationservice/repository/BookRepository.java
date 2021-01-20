@@ -17,6 +17,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Modifying
     @Query("UPDATE Book b SET b.rating = (b.rating + :newRat) / 2 WHERE b.id = :id")
-    void setBookForRatting(@Param("newRat") Double newRat, @Param("id") Long id);
+    void setNewRatingForBookById(@Param("newRat") Double newRat, @Param("id") Long id);
 
 }

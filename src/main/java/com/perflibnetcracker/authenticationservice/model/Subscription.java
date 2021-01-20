@@ -24,8 +24,6 @@ public class Subscription extends BaseEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
-    // TODO(Kuptsov) MAJOR: Переименовать - это кол-во бесплатных книг, а не бесплатная
-    //  книга, не забыть про миграции (alter table) и dto на стороне фронта
     @Column(name = "free_book_count")
     private Integer freeBookCount;
 }

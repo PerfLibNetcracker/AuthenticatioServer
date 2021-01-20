@@ -2,6 +2,7 @@ package com.perflibnetcracker.authenticationservice.service;
 
 import com.perflibnetcracker.authenticationservice.DTO.SubscriptionInfoDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
+import com.perflibnetcracker.authenticationservice.exceptions.AlreadyHasSubscriptionException;
 
 public interface SubscriptionsService {
     /**
@@ -19,7 +20,7 @@ public interface SubscriptionsService {
      * @param username пользователя
      * @param days     кол-во дней подписки
      */
-    void addSubscriptionToUser(String username, Integer days);
+    void addSubscriptionToUser(String username, Integer days) throws AlreadyHasSubscriptionException;
 
     /**
      * Вернуть DTO содержащую информацию об подписке (окончание, кол-во бесплатных книг)

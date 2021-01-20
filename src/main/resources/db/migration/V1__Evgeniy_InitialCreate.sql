@@ -30,7 +30,3 @@ create table books_user(
     book_id bigint not null references main_model.book,
     primary key(user_id, book_id)
 );
-
-insert into books_user(
-	user_id, book_id)
-	values (1, 1);
