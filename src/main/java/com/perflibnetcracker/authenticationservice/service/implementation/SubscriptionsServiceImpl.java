@@ -2,18 +2,17 @@ package com.perflibnetcracker.authenticationservice.service.implementation;
 
 import com.perflibnetcracker.authenticationservice.DTO.SubscriptionInfoDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
-import com.perflibnetcracker.authenticationservice.exceptions.AlreadyHasSubscriptionException;
+import com.perflibnetcracker.authenticationservice.exceptions.UserAlreadyHasSubscriptionException;
 import com.perflibnetcracker.authenticationservice.model.Subscription;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.SubscriptionRepository;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
 import com.perflibnetcracker.authenticationservice.service.SubscriptionsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.Set;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -28,18 +27,16 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
         this.subscriptionRepository = subscriptionRepository;
     }
 
-    // TODO(Kuptsov) MINOR: В случае если будут несколько подписок,
-    //  нужно подумать о том как это будет работать
     @Override
     public UserInfoDTO getUserInfoDTOByUsername(String username) {
         User user = userRepository.findByUsername(username);
-        Set<Subscription> subscriptions = user.getSubscriptions();
+        if (isNull(user)) {
+            throw new UsernameNotFoundException("Пользователь под именем " + username + " не был найден");
+        }
+        Subscription subscription =
+                subscriptionRepository.getUserNonExpiredSubscriptionByUsername(username, LocalDateTime.now());
         UserInfoDTO userInfoDTO = new UserInfoDTO(user);
-        if (subscriptions.size() > 0) {
-            Subscription subscription = subscriptions
-                    .stream()
-                    .findFirst()
-                    .get();
+        if (nonNull(subscription)) {
             if (subscription.getEndTime().isAfter(LocalDateTime.now())) {
                 userInfoDTO.setHasSub(true);
             }
@@ -51,51 +48,38 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     }
 
     @Override
-    public void addSubscriptionToUser(String username, Integer days) throws AlreadyHasSubscriptionException {
+    public void addSubscriptionToUser(String username, Integer days) throws UserAlreadyHasSubscriptionException {
         User user = userRepository.findByUsername(username);
         if (isNull(user)) {
-            throw new NullPointerException("USER не был найден по Username");
+            throw new UsernameNotFoundException("Пользователь с именем " + username + " не был найден по имени");
         }
-        if (user.getSubscriptions().size() > 0) {
-            // TODO(Kuptsov) MINOR: Подумать что делать тут если будут несколько подписок
-            Subscription subscription = user.getSubscriptions()
-                    .stream()
-                    .findFirst()
-                    .orElse(null);
-            if (nonNull(subscription) && subscription.getEndTime().isAfter(LocalDateTime.now())) {
-                throw new AlreadyHasSubscriptionException("User под именем " + username + " уже имеет подписку");
-            }
+        LocalDateTime now = LocalDateTime.now();
+        boolean hasActiveSubscription =
+                subscriptionRepository.userHasNonExpiredSubscriptionByUsername(username, now);
+        if (hasActiveSubscription) {
+            throw new UserAlreadyHasSubscriptionException("Пользователь под именем " + username + " уже имеет подписку");
         }
         Subscription subscriptionForDB = new Subscription();
-        subscriptionForDB.setEndTime(LocalDateTime.now().plusDays(days));
+        subscriptionForDB.setEndTime(now.plusDays(days));
         if (days == 7) {
             //TODO(Kuptsov) MINOR: В идеале нужно вынести кол-во беспл. книг в конфигурационные файлы
             subscriptionForDB.setFreeBookCount(3);
         } else if (days == 30) {
             subscriptionForDB.setFreeBookCount(5);
         }
-        // TODO(Kuptsov) MINOR: Хорошо бы обьединить как-то подписки и купленные книги по подписке
-        //  может закинуть купленные книги подписок в подписки?
-        user.getBoughtBooks().clear();
         user.getSubscriptions().add(subscriptionForDB);
         userRepository.save(user);
     }
 
     @Override
     public SubscriptionInfoDTO getSubscriptionInfoDTOByUsername(String username) {
-        Collection<Subscription> subscriptions = subscriptionRepository.getSubscriptionsByUsername(username);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Subscription subscription =
+                subscriptionRepository.getUserNonExpiredSubscriptionByUsername(username, LocalDateTime.now());
         SubscriptionInfoDTO subscriptionInfoDTO = new SubscriptionInfoDTO();
-        if (subscriptions.size() > 0) {
-            // TODO(Kuptsov) MINOR: Подумать что делать тут если будут несколько подписок
-            Subscription subscription = subscriptions
-                    .stream()
-                    .findFirst()
-                    .get();
-            if (subscription.getEndTime().isAfter(LocalDateTime.now())) {
-                subscriptionInfoDTO.setEndTime(subscription.getEndTime().format(formatter));
-                subscriptionInfoDTO.setFreeBookCount(subscription.getFreeBookCount());
-            }
+        if (nonNull(subscription)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            subscriptionInfoDTO.setEndTime(subscription.getEndTime().format(formatter));
+            subscriptionInfoDTO.setFreeBookCount(subscription.getFreeBookCount());
         }
         return subscriptionInfoDTO;
     }

@@ -2,6 +2,7 @@ package com.perflibnetcracker.authenticationservice.controller;
 
 
 import com.perflibnetcracker.authenticationservice.DTO.UserBookDTO;
+import com.perflibnetcracker.authenticationservice.exceptions.NoBookRatingException;
 import com.perflibnetcracker.authenticationservice.model.Book;
 import com.perflibnetcracker.authenticationservice.service.BookService;
 import com.perflibnetcracker.authenticationservice.service.RatingService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import static java.util.Objects.isNull;
 
 @RestController
 @CrossOrigin(origins = "${spring.frontend.url}")
@@ -30,19 +33,19 @@ public class RatingController {
     @GetMapping("${spring.urlmap}/user-book-rated/{bookId}")
     public UserBookDTO getUserRatedBooks(@AuthenticationPrincipal UserDetails currentUser,
                                          @PathVariable Long bookId) {
-        return ratingService.isBookRatedByUser(currentUser.getUsername(), bookId);
+        return ratingService.getIsBookRatedByUserDTO(currentUser.getUsername(), bookId);
     }
 
-    @PutMapping("${spring.urlmap}/update-book/{id}")
+    @PutMapping("${spring.urlmap}/update-book/{bookId}")
     public ResponseEntity<String> updateRatingForBook(@AuthenticationPrincipal UserDetails currentUser,
-                                                      @PathVariable(value = "id") Long id,
+                                                      @PathVariable(value = "bookId") Long bookId,
                                                       @RequestBody Book bookDetails) throws Exception {
         Double newRating = bookDetails.getRating();
-        if (newRating == null) {
-            throw new Exception("Cannot be null!");
+        if (isNull(newRating)) {
+            throw new NoBookRatingException("Принимающее DTO книги с id: " + bookId + " не имело рейтинга");
         }
-        bookService.newRatingForBookById(newRating, id);
-        bookService.setUserRatedBook(id, currentUser.getUsername());
+        bookService.setNewRatingForBookById(newRating, bookId);
+        bookService.addToBookRatedUsersUserByBookId(currentUser.getUsername(), bookId);
         return new ResponseEntity<>("Rating correct!", HttpStatus.OK);
     }
 }

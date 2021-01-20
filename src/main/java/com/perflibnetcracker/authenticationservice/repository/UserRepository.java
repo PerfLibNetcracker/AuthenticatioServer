@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String userName);
 
-    User findByUsernameAndPassword(String userName, String password);
+    Boolean existsByUsername(String username);
 
     //TODO(Kutpsov) VERYMINOR: Возможно потребуется серьёзный рефактор query если будут изменения в коде, будьте внимательны
 

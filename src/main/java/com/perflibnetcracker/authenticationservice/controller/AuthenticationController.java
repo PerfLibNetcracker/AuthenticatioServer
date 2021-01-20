@@ -3,6 +3,7 @@ package com.perflibnetcracker.authenticationservice.controller;
 
 import com.perflibnetcracker.authenticationservice.DTO.AuthenticationDTO;
 import com.perflibnetcracker.authenticationservice.DTO.UserInfoDTO;
+import com.perflibnetcracker.authenticationservice.exceptions.UserRoleNotFoundException;
 import com.perflibnetcracker.authenticationservice.mappers.UserMapper;
 import com.perflibnetcracker.authenticationservice.model.User;
 import com.perflibnetcracker.authenticationservice.repository.UserRepository;
@@ -17,12 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "${spring.frontend.url}")
 public class AuthenticationController {
-
     private final AuthenticationService authenticationService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public AuthenticationController(AuthenticationService authenticationService, UserRepository userRepository, UserMapper userMapper) {
+    public AuthenticationController(AuthenticationService authenticationService,
+                                    UserRepository userRepository,
+                                    UserMapper userMapper) {
         this.authenticationService = authenticationService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -34,7 +36,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("${spring.urlmap}/registration")
-    public User newUser(@RequestBody User user) throws Exception {
+    public User newUser(@RequestBody User user) throws UserRoleNotFoundException {
         return authenticationService.saveUser(user);
     }
 
