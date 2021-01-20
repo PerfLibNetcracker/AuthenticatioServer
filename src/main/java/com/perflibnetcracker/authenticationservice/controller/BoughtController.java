@@ -1,7 +1,9 @@
 package com.perflibnetcracker.authenticationservice.controller;
 
 import com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO;
-import com.perflibnetcracker.authenticationservice.repository.UserRepository;
+import com.perflibnetcracker.authenticationservice.exceptions.BookNotFoundException;
+import com.perflibnetcracker.authenticationservice.exceptions.SubscriptionNotFoundException;
+import com.perflibnetcracker.authenticationservice.exceptions.UserAlreadyBoughtBookException;
 import com.perflibnetcracker.authenticationservice.service.BoughtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "${spring.frontend.url}")
 public class BoughtController {
-
-    private final UserRepository userRepository;
     private final BoughtService boughtService;
 
-    public BoughtController(UserRepository userRepository, BoughtService boughtService) {
-        this.userRepository = userRepository;
+    public BoughtController(BoughtService boughtService) {
         this.boughtService = boughtService;
     }
 
@@ -32,17 +31,19 @@ public class BoughtController {
         return boughtService.getUserBoughtBooksDTO(currentUser.getUsername(), bookId);
     }
 
-    @PostMapping("${spring.urlmap}/add-book-for-bought-books/{id_book}")
+    @PostMapping("${spring.urlmap}/add-book-for-bought-books/{bookId}")
     public ResponseEntity<String> addBookForBoughtBooks(@AuthenticationPrincipal UserDetails currentUser,
-                                                        @PathVariable(value = "id_book") Long idBook) {
-        boughtService.addBookForBoughtBooks(currentUser.getUsername(), idBook);
+                                                        @PathVariable(value = "bookId") Long bookId)
+            throws BookNotFoundException {
+        boughtService.addBookForBoughtBooks(currentUser.getUsername(), bookId);
         return new ResponseEntity<>("Book added successes!", HttpStatus.OK);
     }
 
-    @PostMapping("${spring.urlmap}/add-book-for-bought-books-by-subscription/{id_book}")
+    @PostMapping("${spring.urlmap}/add-book-for-bought-books-by-subscription/{bookId}")
     public ResponseEntity<String> addBookForBoughtBooksBySubscription(@AuthenticationPrincipal UserDetails currentUser,
-                                                                      @PathVariable(value = "id_book") Long idBook) {
-        boughtService.buyBookBySubscription(currentUser.getUsername(), idBook);
+                                                                      @PathVariable(value = "bookId") Long bookId)
+            throws UserAlreadyBoughtBookException, SubscriptionNotFoundException, BookNotFoundException {
+        boughtService.buyBookBySubscription(currentUser.getUsername(), bookId);
         return new ResponseEntity<>("Book added successes", HttpStatus.OK);
     }
 }

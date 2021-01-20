@@ -1,8 +1,7 @@
 package com.perflibnetcracker.authenticationservice.service;
 
 public interface BookService {
+    void setNewRatingForBookById(Double newRating, Long bookId);
 
-    void newRatingForBookById(Double newRat, Long id);
-
-    void setUserRatedBook(Long id, String username);
+    void addToBookRatedUsersUserByBookId(String username, Long bookId);
 }

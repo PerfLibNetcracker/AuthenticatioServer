@@ -1,6 +1,9 @@
 package com.perflibnetcracker.authenticationservice.service;
 
 import com.perflibnetcracker.authenticationservice.DTO.UserBoughtBooksDTO;
+import com.perflibnetcracker.authenticationservice.exceptions.BookNotFoundException;
+import com.perflibnetcracker.authenticationservice.exceptions.SubscriptionNotFoundException;
+import com.perflibnetcracker.authenticationservice.exceptions.UserAlreadyBoughtBookException;
 
 public interface BoughtService {
     /**
@@ -12,7 +15,8 @@ public interface BoughtService {
      */
     UserBoughtBooksDTO getUserBoughtBooksDTO(String username, Long bookId);
 
-    void addBookForBoughtBooks(String username, Long bookId);
+    void addBookForBoughtBooks(String username, Long bookId) throws BookNotFoundException;
 
-    void buyBookBySubscription(String username, Long bookId);
+    void buyBookBySubscription(String username, Long bookId)
+            throws UserAlreadyBoughtBookException, SubscriptionNotFoundException, BookNotFoundException;
 }

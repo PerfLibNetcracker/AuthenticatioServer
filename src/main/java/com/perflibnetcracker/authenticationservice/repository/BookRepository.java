@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-
     @Query("select b from User u " +
             "inner join Book b on b.id = :bookId and u member of b.ratedUsers " +
             "where u.username = :username")

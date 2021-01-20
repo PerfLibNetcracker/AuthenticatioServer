@@ -16,7 +16,6 @@ import org.springframework.security.web.firewall.HttpFirewall;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final UserService userService;
 
     public WebSecurityConfig(UserService userService) {

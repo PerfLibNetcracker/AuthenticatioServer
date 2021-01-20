@@ -10,20 +10,17 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String userName);
 
-    User findByUsernameAndPassword(String userName, String password);
-
-    //TODO(Kutpsov) VERYMINOR: Возможно потребуется серьёзный рефактор query если будут изменения в коде, будьте внимательны
+    Boolean existsByUsername(String username);
 
     /**
-     * Проверяет покупал ли User книгу
+     * Проверяет покупал ли пользователь книгу
      *
-     * @param username
-     * @param bookId
-     * @return
+     * @param username пользователя
+     * @param bookId   ID книги
+     * @return true - пользователь купил книгу, false - не купил
      */
-    @Query(value = "select count(bb) > 0 from auth_service.users u " +
-            "join auth_service.bought_book bb on bb.book_id = :book_id " +
-            "join auth_service.users_bought_books ubb on ubb.user_id = u.id and ubb.bought_books_id = bb.book_id " +
-            "where u.username = :username", nativeQuery = true)
-    Boolean hasUserBoughtBook(@Param("username") String username, @Param("book_id") Long bookId);
+    @Query(value = "select (count(userBoughtBook) > 0) from User user " +
+            "join user.boughtBooks userBoughtBook on userBoughtBook.bookId = :bookId " +
+            "where user.username = :username")
+    Boolean hasUserBoughtBook(@Param("username") String username, @Param("bookId") Long bookId);
 }
